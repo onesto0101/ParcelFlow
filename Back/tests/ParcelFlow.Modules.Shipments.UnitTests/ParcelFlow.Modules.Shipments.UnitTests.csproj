@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ParcelFlow.Modules.Shipments.Domain\ParcelFlow.Modules.Shipments.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
