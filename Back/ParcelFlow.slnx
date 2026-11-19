@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/ParcelFlow.BuildingBlocks.Domain/ParcelFlow.BuildingBlocks.Domain.csproj" />
     <Project Path="src/ParcelFlow.Modules.Deliveries.Domain/ParcelFlow.Modules.Deliveries.Domain.csproj" />
     <Project Path="src/ParcelFlow.Modules.Shipments.Domain/ParcelFlow.Modules.Shipments.Domain.csproj" />
     <Project Path="src/ParcelFlow.Modules.Tracking.Domain/ParcelFlow.Modules.Tracking.Domain.csproj" />
