@@ -27,6 +27,18 @@ public static class ShipmentsInfrastructureModule
     }
 
     /// <summary>
+    /// Aplica las migraciones pendientes del módulo. Pensado para desarrollo y tests.
+    /// Se crea un "scope" porque el DbContext es Scoped (vive lo que dura una petición)
+    /// y al arrancar la app todavía no hay ninguna petición.
+    /// </summary>
+    public static async Task MigrateShipmentsDatabaseAsync(this IServiceProvider services)
+    {
+        await using var scope = services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ShipmentsDbContext>();
+        await dbContext.Database.MigrateAsync();
+    }
+
+    /// <summary>
     /// Configuración compartida por la app y por las herramientas de migraciones (dotnet ef).
     /// </summary>
     internal static void ConfigureDbContext(DbContextOptionsBuilder options, string connectionString) =>

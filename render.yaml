@@ -1,0 +1,19 @@
+# Blueprint de Render: describe la API como código. En Render: New → Blueprint → elegir este repo.
+# Los valores con "sync: false" son secretos o dependen de otros servicios: Render los pide al crear.
+services:
+  - type: web
+    name: parcelflow-api
+    runtime: docker
+    plan: free
+    rootDir: Back
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ConnectionStrings__ParcelFlow   # cadena de conexión de Neon (formato .NET)
+        sync: false
+      - key: Cors__AllowedOrigins__0         # URL del front en Vercel, ej. https://parcelflow.vercel.app
+        sync: false
+      - key: Database__MigrateOnStartup
+        value: "true"

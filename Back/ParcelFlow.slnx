@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/ParcelFlow.Api/ParcelFlow.Api.csproj" />
     <Project Path="src/ParcelFlow.BuildingBlocks.Application/ParcelFlow.BuildingBlocks.Application.csproj" />
     <Project Path="src/ParcelFlow.BuildingBlocks.Domain/ParcelFlow.BuildingBlocks.Domain.csproj" />
     <Project Path="src/ParcelFlow.Modules.Deliveries.Domain/ParcelFlow.Modules.Deliveries.Domain.csproj" />
@@ -9,6 +10,7 @@
     <Project Path="src/ParcelFlow.Modules.Tracking.Domain/ParcelFlow.Modules.Tracking.Domain.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/ParcelFlow.Api.IntegrationTests/ParcelFlow.Api.IntegrationTests.csproj" />
     <Project Path="tests/ParcelFlow.Modules.Deliveries.UnitTests/ParcelFlow.Modules.Deliveries.UnitTests.csproj" />
     <Project Path="tests/ParcelFlow.Modules.Shipments.IntegrationTests/ParcelFlow.Modules.Shipments.IntegrationTests.csproj" />
     <Project Path="tests/ParcelFlow.Modules.Shipments.UnitTests/ParcelFlow.Modules.Shipments.UnitTests.csproj" />

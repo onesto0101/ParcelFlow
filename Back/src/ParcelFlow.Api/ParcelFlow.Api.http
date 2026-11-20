@@ -1,0 +1,48 @@
+# Peticiones de prueba. En Visual Studio aparece "Send request" encima de cada una.
+# Antes: docker compose up -d  y arrancar la API (perfil "http").
+@api = http://localhost:5163
+
+### 1. Crear un envío → 201 Created. Copia el "trackingNumber" y el "shipmentId" de la respuesta.
+POST {{api}}/api/shipments
+Content-Type: application/json
+
+{
+  "sender": {
+    "name": "Ana López",
+    "phone": "81 1234 5678",
+    "address": { "street": "Av. Constitución 100", "city": "Monterrey", "state": "Nuevo León", "postalCode": "64000", "country": "MX" }
+  },
+  "recipient": {
+    "name": "Luis Pérez",
+    "phone": "+52 33 9876 5432",
+    "address": { "street": "Calle Juárez 5", "city": "Guadalajara", "state": "Jalisco", "postalCode": "44100", "country": "MX" }
+  },
+  "weightKg": 5,
+  "lengthCm": 30,
+  "widthCm": 20,
+  "heightCm": 10
+}
+
+### 2. Consultar por número de guía → 200 (pega aquí el tuyo)
+@trackingNumber = PFXXXXXXXXXX
+GET {{api}}/api/shipments/tracking/{{trackingNumber}}
+
+### 3. Cancelar → 204. Repetirla da 409 (ya cancelado).
+@shipmentId = 00000000-0000-0000-0000-000000000000
+POST {{api}}/api/shipments/{{shipmentId}}/cancel
+Content-Type: application/json
+
+{ "reason": "El cliente ya no lo necesita" }
+
+### 4. Peso inválido → 400 con "code" y "field"
+POST {{api}}/api/shipments
+Content-Type: application/json
+
+{
+  "sender": { "name": "Ana", "phone": "8112345678", "address": { "street": "A 1", "city": "MTY", "state": "NL", "postalCode": "64000", "country": "MX" } },
+  "recipient": { "name": "Luis", "phone": "3398765432", "address": { "street": "B 2", "city": "GDL", "state": "JAL", "postalCode": "44100", "country": "MX" } },
+  "weightKg": 80, "lengthCm": 30, "widthCm": 20, "heightCm": 10
+}
+
+### 5. Documento OpenAPI
+GET {{api}}/openapi/v1.json

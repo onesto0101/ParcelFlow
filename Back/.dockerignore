@@ -1,0 +1,7 @@
+# Lo que NO se manda a Docker al construir la imagen (más rápido y sin basura).
+**/bin/
+**/obj/
+**/.vs/
+tests/
+*.user
+docker-compose.yml
