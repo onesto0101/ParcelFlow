@@ -1,0 +1,23 @@
+# Base de datos para desarrollo local.
+#   Arrancar:  docker compose up -d
+#   Parar:     docker compose down        (los datos se conservan en el volumen)
+#   Borrar BD: docker compose down -v     (¡borra también los datos!)
+services:
+  postgres:
+    image: postgres:18
+    container_name: parcelflow-postgres
+    environment:
+      POSTGRES_DB: parcelflow
+      POSTGRES_USER: parcelflow
+      POSTGRES_PASSWORD: parcelflow   # solo desarrollo local
+    ports:
+      - "5432:5432"
+    volumes:
+      - parcelflow-pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U parcelflow -d parcelflow"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  parcelflow-pgdata:

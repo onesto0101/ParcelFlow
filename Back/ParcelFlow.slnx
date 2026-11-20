@@ -5,10 +5,12 @@
     <Project Path="src/ParcelFlow.Modules.Deliveries.Domain/ParcelFlow.Modules.Deliveries.Domain.csproj" />
     <Project Path="src/ParcelFlow.Modules.Shipments.Application/ParcelFlow.Modules.Shipments.Application.csproj" />
     <Project Path="src/ParcelFlow.Modules.Shipments.Domain/ParcelFlow.Modules.Shipments.Domain.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Shipments.Infrastructure/ParcelFlow.Modules.Shipments.Infrastructure.csproj" />
     <Project Path="src/ParcelFlow.Modules.Tracking.Domain/ParcelFlow.Modules.Tracking.Domain.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ParcelFlow.Modules.Deliveries.UnitTests/ParcelFlow.Modules.Deliveries.UnitTests.csproj" />
+    <Project Path="tests/ParcelFlow.Modules.Shipments.IntegrationTests/ParcelFlow.Modules.Shipments.IntegrationTests.csproj" />
     <Project Path="tests/ParcelFlow.Modules.Shipments.UnitTests/ParcelFlow.Modules.Shipments.UnitTests.csproj" />
     <Project Path="tests/ParcelFlow.Modules.Tracking.UnitTests/ParcelFlow.Modules.Tracking.UnitTests.csproj" />
   </Folder>

@@ -44,6 +44,11 @@ public sealed record Contact
         init => _address = value ?? throw new ArgumentNullException(nameof(Address));
     }
 
+    // Solo para EF Core: no puede pasar un Address (otro value object) por constructor al leer
+    // de la BD, así que crea el objeto vacío y rellena los campos privados directamente.
+    // Es privado: desde el código nadie puede crear un Contact sin validar.
+    private Contact() { }
+
     public Contact(string name, string phone, Address address)
     {
         Name = name;
