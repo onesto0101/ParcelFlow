@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParcelFlow.Modules.Shipments.Domain\ParcelFlow.Modules.Shipments.Domain.csproj" />
+    <ProjectReference Include="..\ParcelFlow.BuildingBlocks.Application\ParcelFlow.BuildingBlocks.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Los handlers son internal; los tests de este módulo sí pueden verlos. -->
+    <InternalsVisibleTo Include="ParcelFlow.Modules.Shipments.UnitTests" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
