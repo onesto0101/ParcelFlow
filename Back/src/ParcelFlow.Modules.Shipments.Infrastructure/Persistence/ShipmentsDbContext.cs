@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ParcelFlow.BuildingBlocks.Infrastructure.Outbox;
 using ParcelFlow.Modules.Shipments.Application.Abstractions;
 using ParcelFlow.Modules.Shipments.Domain;
 
@@ -27,6 +28,9 @@ public sealed class ShipmentsDbContext(DbContextOptions<ShipmentsDbContext> opti
 
         // Busca todas las clases IEntityTypeConfiguration<T> de este proyecto y las aplica.
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ShipmentsDbContext).Assembly);
+
+        // Tabla shipments.OutboxMessages (la configuración vive en BuildingBlocks: es igual en todos los módulos).
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
     }
 
     // Implementación explícita: DbContext.SaveChangesAsync devuelve Task<int> (filas afectadas)

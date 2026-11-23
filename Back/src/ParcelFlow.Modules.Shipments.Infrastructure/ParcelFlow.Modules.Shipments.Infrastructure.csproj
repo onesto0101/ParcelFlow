@@ -2,6 +2,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ParcelFlow.Modules.Shipments.Application\ParcelFlow.Modules.Shipments.Application.csproj" />
+    <ProjectReference Include="..\ParcelFlow.Modules.Shipments.IntegrationEvents\ParcelFlow.Modules.Shipments.IntegrationEvents.csproj" />
+    <ProjectReference Include="..\ParcelFlow.BuildingBlocks.Infrastructure\ParcelFlow.BuildingBlocks.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

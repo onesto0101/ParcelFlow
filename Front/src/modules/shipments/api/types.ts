@@ -38,6 +38,28 @@ export interface CreateShipmentResult {
   currency: string
 }
 
+/** Una fila de GET /api/shipments (ShipmentSummaryDto). */
+export interface ShipmentSummary {
+  id: string
+  trackingNumber: string
+  status: ShipmentStatus
+  senderName: string
+  originCity: string
+  recipientName: string
+  destinationCity: string
+  cost: number
+  currency: string
+  createdAt: string
+}
+
+/** Filtros de GET /api/shipments (GetShipmentsQuery). */
+export interface ShipmentsFilter {
+  status?: ShipmentStatus
+  search?: string
+  page?: number
+  pageSize?: number
+}
+
 /** Respuesta de GET /api/shipments/tracking/{trackingNumber} (ShipmentDto). */
 export interface Shipment {
   id: string

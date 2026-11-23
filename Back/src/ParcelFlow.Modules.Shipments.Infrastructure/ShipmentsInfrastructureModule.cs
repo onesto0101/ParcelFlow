@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
+using ParcelFlow.BuildingBlocks.Infrastructure.Outbox;
 using ParcelFlow.Modules.Shipments.Application.Abstractions;
+using ParcelFlow.Modules.Shipments.Infrastructure.Outbox;
 using ParcelFlow.Modules.Shipments.Infrastructure.Persistence;
 
 namespace ParcelFlow.Modules.Shipments.Infrastructure;
@@ -16,12 +18,22 @@ public static class ShipmentsInfrastructureModule
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
-        services.AddDbContext<ShipmentsDbContext>(options => ConfigureDbContext(options, connectionString));
+        // (serviceProvider, options): la sobrecarga que da acceso a DI, para enganchar el interceptor
+        // del outbox (necesita el "timbre", que es un singleton).
+        services.AddDbContext<ShipmentsDbContext>((serviceProvider, options) =>
+        {
+            ConfigureDbContext(options, connectionString);
+            options.AddOutboxInterceptor<ShipmentsDbContext>(serviceProvider, new ShipmentsDomainEventMapper());
+        });
 
         // Mismo objeto para las dos interfaces: el repositorio añade al DbContext y el unit of work
         // guarda ESE MISMO DbContext. Si fueran instancias distintas, SaveChanges no guardaría nada.
         services.AddScoped<IShipmentsUnitOfWork>(sp => sp.GetRequiredService<ShipmentsDbContext>());
         services.AddScoped<IShipmentRepository, ShipmentRepository>();
+        services.AddScoped<IShipmentQueries, ShipmentQueries>();
+
+        // Tabla outbox + procesador en segundo plano que publica los eventos de este módulo.
+        services.AddOutbox<ShipmentsDbContext>();
 
         return services;
     }

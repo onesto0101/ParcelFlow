@@ -9,11 +9,22 @@ WORKDIR /src
 
 # 1) Primero solo los .csproj y restore: Docker cachea esta capa y, si no cambian
 #    las dependencias, no vuelve a descargar paquetes NuGet en cada build.
+#    (Si añades un proyecto nuevo a src/, añade aquí su línea o el restore fallará.)
 COPY src/ParcelFlow.BuildingBlocks.Domain/*.csproj src/ParcelFlow.BuildingBlocks.Domain/
 COPY src/ParcelFlow.BuildingBlocks.Application/*.csproj src/ParcelFlow.BuildingBlocks.Application/
+COPY src/ParcelFlow.BuildingBlocks.Infrastructure/*.csproj src/ParcelFlow.BuildingBlocks.Infrastructure/
 COPY src/ParcelFlow.Modules.Shipments.Domain/*.csproj src/ParcelFlow.Modules.Shipments.Domain/
 COPY src/ParcelFlow.Modules.Shipments.Application/*.csproj src/ParcelFlow.Modules.Shipments.Application/
 COPY src/ParcelFlow.Modules.Shipments.Infrastructure/*.csproj src/ParcelFlow.Modules.Shipments.Infrastructure/
+COPY src/ParcelFlow.Modules.Shipments.IntegrationEvents/*.csproj src/ParcelFlow.Modules.Shipments.IntegrationEvents/
+COPY src/ParcelFlow.Modules.Tracking.Domain/*.csproj src/ParcelFlow.Modules.Tracking.Domain/
+COPY src/ParcelFlow.Modules.Tracking.Application/*.csproj src/ParcelFlow.Modules.Tracking.Application/
+COPY src/ParcelFlow.Modules.Tracking.Infrastructure/*.csproj src/ParcelFlow.Modules.Tracking.Infrastructure/
+COPY src/ParcelFlow.Modules.Tracking.IntegrationEvents/*.csproj src/ParcelFlow.Modules.Tracking.IntegrationEvents/
+COPY src/ParcelFlow.Modules.Deliveries.Domain/*.csproj src/ParcelFlow.Modules.Deliveries.Domain/
+COPY src/ParcelFlow.Modules.Deliveries.Application/*.csproj src/ParcelFlow.Modules.Deliveries.Application/
+COPY src/ParcelFlow.Modules.Deliveries.Infrastructure/*.csproj src/ParcelFlow.Modules.Deliveries.Infrastructure/
+COPY src/ParcelFlow.Modules.Deliveries.IntegrationEvents/*.csproj src/ParcelFlow.Modules.Deliveries.IntegrationEvents/
 COPY src/ParcelFlow.Api/*.csproj src/ParcelFlow.Api/
 RUN dotnet restore src/ParcelFlow.Api/ParcelFlow.Api.csproj
 

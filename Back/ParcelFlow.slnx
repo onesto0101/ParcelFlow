@@ -3,11 +3,19 @@
     <Project Path="src/ParcelFlow.Api/ParcelFlow.Api.csproj" />
     <Project Path="src/ParcelFlow.BuildingBlocks.Application/ParcelFlow.BuildingBlocks.Application.csproj" />
     <Project Path="src/ParcelFlow.BuildingBlocks.Domain/ParcelFlow.BuildingBlocks.Domain.csproj" />
+    <Project Path="src/ParcelFlow.BuildingBlocks.Infrastructure/ParcelFlow.BuildingBlocks.Infrastructure.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Deliveries.Application/ParcelFlow.Modules.Deliveries.Application.csproj" />
     <Project Path="src/ParcelFlow.Modules.Deliveries.Domain/ParcelFlow.Modules.Deliveries.Domain.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Deliveries.Infrastructure/ParcelFlow.Modules.Deliveries.Infrastructure.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Deliveries.IntegrationEvents/ParcelFlow.Modules.Deliveries.IntegrationEvents.csproj" />
     <Project Path="src/ParcelFlow.Modules.Shipments.Application/ParcelFlow.Modules.Shipments.Application.csproj" />
     <Project Path="src/ParcelFlow.Modules.Shipments.Domain/ParcelFlow.Modules.Shipments.Domain.csproj" />
     <Project Path="src/ParcelFlow.Modules.Shipments.Infrastructure/ParcelFlow.Modules.Shipments.Infrastructure.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Shipments.IntegrationEvents/ParcelFlow.Modules.Shipments.IntegrationEvents.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Tracking.Application/ParcelFlow.Modules.Tracking.Application.csproj" />
     <Project Path="src/ParcelFlow.Modules.Tracking.Domain/ParcelFlow.Modules.Tracking.Domain.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Tracking.Infrastructure/ParcelFlow.Modules.Tracking.Infrastructure.csproj" />
+    <Project Path="src/ParcelFlow.Modules.Tracking.IntegrationEvents/ParcelFlow.Modules.Tracking.IntegrationEvents.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ParcelFlow.Api.IntegrationTests/ParcelFlow.Api.IntegrationTests.csproj" />

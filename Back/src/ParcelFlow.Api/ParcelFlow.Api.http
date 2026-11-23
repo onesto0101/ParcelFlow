@@ -46,3 +46,50 @@ Content-Type: application/json
 
 ### 5. Documento OpenAPI
 GET {{api}}/openapi/v1.json
+
+### ───────────── Listado de envíos (CQRS: proyección + paginación) ─────────────
+GET {{api}}/api/shipments?status=Registered&search=monterrey&page=1&pageSize=10
+
+### ───────────── Tracking ─────────────
+# Tras crear un envío, Tracking lo recibe por evento (outbox) en una fracción de segundo.
+GET {{api}}/api/tracking/{{trackingNumber}}
+
+### Registrar movimiento (manuales: PickedUp → InTransit → AtDistributionCenter)
+POST {{api}}/api/tracking/{{trackingNumber}}/events
+Content-Type: application/json
+
+{ "status": "PickedUp", "location": "Monterrey", "description": "Recolectado en domicilio" }
+
+### Al registrar AtDistributionCenter, Deliveries crea la entrega pendiente.
+POST {{api}}/api/tracking/{{trackingNumber}}/events
+Content-Type: application/json
+
+{ "status": "AtDistributionCenter", "location": "CEDIS Guadalajara", "description": "Recibido en el centro" }
+
+### ───────────── Deliveries ─────────────
+GET {{api}}/api/deliveries?status=Pending
+
+### Pega el "id" de la entrega
+@deliveryId = 00000000-0000-0000-0000-000000000000
+GET {{api}}/api/deliveries/{{deliveryId}}
+
+### Asignar repartidor → Tracking pasa a OutForDelivery
+POST {{api}}/api/deliveries/{{deliveryId}}/assign
+Content-Type: application/json
+
+{ "courierId": "REP-014" }
+
+### Intento fallido (RecipientAbsent, WrongAddress, Refused, Inaccessible, Other)
+POST {{api}}/api/deliveries/{{deliveryId}}/fail
+Content-Type: application/json
+
+{ "failureCode": "RecipientAbsent" }
+
+### Confirmar entrega → Tracking y Shipments pasan a Delivered
+POST {{api}}/api/deliveries/{{deliveryId}}/confirm
+Content-Type: application/json
+
+{ "receivedBy": "Luis Pérez", "notes": "Recepción del edificio" }
+
+### ───────────── Dashboard (composición de los 3 módulos) ─────────────
+GET {{api}}/api/dashboard

@@ -9,6 +9,7 @@ import { ApiError } from '@/shared/api/http'
 import { PageHeader } from '@/shared/components/PageHeader'
 import { StatusBadge } from '@/shared/components/StatusBadge'
 import { TrackingNumber } from '@/shared/components/TrackingNumber'
+import { TrackingSummaryCard } from '@/modules/tracking/components/TrackingSummaryCard'
 import { formatDateTime, formatKg, formatMoney, normalizeTrackingNumber } from '@/shared/lib/format'
 import { useShipment } from '../api/hooks'
 import type { ContactInput, Shipment } from '../api/types'
@@ -61,6 +62,8 @@ export function ShipmentDetailPage() {
           <PackageCard shipment={shipment} />
           <CostCard shipment={shipment} />
         </div>
+
+        <TrackingSummaryCard trackingNumber={shipment.trackingNumber} />
       </div>
     </>
   )

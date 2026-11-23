@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Contrato PÚBLICO del módulo Tracking (ver el comentario en Shipments.IntegrationEvents). -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParcelFlow.BuildingBlocks.Application\ParcelFlow.BuildingBlocks.Application.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

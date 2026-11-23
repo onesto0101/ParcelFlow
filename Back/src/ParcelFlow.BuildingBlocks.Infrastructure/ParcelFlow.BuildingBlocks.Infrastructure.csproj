@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParcelFlow.BuildingBlocks.Domain\ParcelFlow.BuildingBlocks.Domain.csproj" />
+    <ProjectReference Include="..\ParcelFlow.BuildingBlocks.Application\ParcelFlow.BuildingBlocks.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Relational y no Npgsql: el outbox sirve con cualquier base de datos; cada módulo elige el proveedor. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0" />
+    <!-- BackgroundService (el procesador del outbox). -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="11.0.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

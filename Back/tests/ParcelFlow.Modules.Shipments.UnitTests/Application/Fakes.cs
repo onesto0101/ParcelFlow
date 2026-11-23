@@ -1,5 +1,8 @@
+using ParcelFlow.BuildingBlocks.Application.Paging;
 using ParcelFlow.Modules.Shipments.Application.Abstractions;
 using ParcelFlow.Modules.Shipments.Application.CreateShipment;
+using ParcelFlow.Modules.Shipments.Application.GetShipments;
+using ParcelFlow.Modules.Shipments.Application.GetShipmentStats;
 using ParcelFlow.Modules.Shipments.Domain;
 
 namespace ParcelFlow.Modules.Shipments.UnitTests.Application;
@@ -34,6 +37,25 @@ internal sealed class FakeShipmentsUnitOfWork : IShipmentsUnitOfWork
         SaveCount++;
         return Task.CompletedTask;
     }
+}
+
+/// <summary>
+/// Consultas falsas: no devuelven datos reales, solo recuerdan con qué argumentos se las llamó.
+/// Así un test comprueba lo que hace el HANDLER (validar y normalizar), no el SQL.
+/// </summary>
+internal sealed class FakeShipmentQueries : IShipmentQueries
+{
+    public (ShipmentStatus? Status, string? Search, PageRequest Page)? LastList { get; private set; }
+
+    public Task<PagedResult<ShipmentSummaryDto>> ListAsync(
+        ShipmentStatus? status, string? search, PageRequest page, CancellationToken cancellationToken)
+    {
+        LastList = (status, search, page);
+        return Task.FromResult(new PagedResult<ShipmentSummaryDto>([], page.Page, page.PageSize, 0));
+    }
+
+    public Task<ShipmentStatsDto> GetStatsAsync(CancellationToken cancellationToken) =>
+        Task.FromResult(new ShipmentStatsDto(0, 0, 0, 0));
 }
 
 internal static class CommandData

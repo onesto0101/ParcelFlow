@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using ParcelFlow.BuildingBlocks.Application.Messaging;
+using ParcelFlow.BuildingBlocks.Application.Paging;
 using ParcelFlow.Modules.Shipments.Application.CancelShipment;
 using ParcelFlow.Modules.Shipments.Application.CreateShipment;
 using ParcelFlow.Modules.Shipments.Application.GetShipmentByTrackingNumber;
+using ParcelFlow.Modules.Shipments.Application.GetShipments;
 
 namespace ParcelFlow.Api.Endpoints;
 
@@ -19,6 +21,10 @@ public static class ShipmentEndpoints
     {
         // Un grupo comparte prefijo de ruta y etiqueta en OpenAPI.
         var group = app.MapGroup("/api/shipments").WithTags("Shipments");
+
+        group.MapGet("/", GetShipments)
+            .WithName("GetShipments")
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
         group.MapPost("/", CreateShipment)
             .WithName("CreateShipment")
@@ -37,6 +43,14 @@ public static class ShipmentEndpoints
 
         return app;
     }
+
+    // GET /api/shipments?status=Registered&search=monterrey&page=1&pageSize=20  → 200 OK + página.
+    // [AsParameters] junta los parámetros de la query string en el record (mismos nombres).
+    private static async Task<Ok<PagedResult<ShipmentSummaryDto>>> GetShipments(
+        [AsParameters] GetShipmentsQuery query,
+        IMediator mediator,
+        CancellationToken cancellationToken) =>
+        TypedResults.Ok(await mediator.Query(query, cancellationToken));
 
     // POST /api/shipments  → 201 Created + cabecera Location con la URL para consultarlo.
     // El cuerpo JSON se convierte directamente en el comando (mismos campos).

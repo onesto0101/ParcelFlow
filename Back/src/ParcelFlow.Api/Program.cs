@@ -1,7 +1,11 @@
 using ParcelFlow.Api.Endpoints;
 using ParcelFlow.Api.ErrorHandling;
+using ParcelFlow.Modules.Deliveries.Application;
+using ParcelFlow.Modules.Deliveries.Infrastructure;
 using ParcelFlow.Modules.Shipments.Application;
 using ParcelFlow.Modules.Shipments.Infrastructure;
+using ParcelFlow.Modules.Tracking.Application;
+using ParcelFlow.Modules.Tracking.Infrastructure;
 
 // ───────────────────────── 1. Registro de servicios (qué existe) ─────────────────────────
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +17,14 @@ var connectionString = builder.Configuration.GetConnectionString("ParcelFlow")
 builder.Services.AddSingleton(TimeProvider.System);
 
 // Módulos: la API no conoce handlers, repositorios ni DbContext; solo "enchufa" cada módulo.
+// Los tres comparten la misma base de datos (cada uno en su schema) y se hablan solo por eventos.
 builder.Services
     .AddShipmentsApplication()
-    .AddShipmentsInfrastructure(connectionString);
+    .AddShipmentsInfrastructure(connectionString)
+    .AddTrackingApplication()
+    .AddTrackingInfrastructure(connectionString)
+    .AddDeliveriesApplication()
+    .AddDeliveriesInfrastructure(connectionString);
 
 // Errores → respuestas ProblemDetails (RFC 9457), el formato estándar de error en HTTP.
 builder.Services.AddProblemDetails();
@@ -54,9 +63,14 @@ if (app.Environment.IsDevelopment())
 if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Database:MigrateOnStartup"))
 {
     await app.Services.MigrateShipmentsDatabaseAsync();
+    await app.Services.MigrateTrackingDatabaseAsync();
+    await app.Services.MigrateDeliveriesDatabaseAsync();
 }
 
 app.MapHealthChecks("/health");
 app.MapShipmentEndpoints();
+app.MapTrackingEndpoints();
+app.MapDeliveryEndpoints();
+app.MapDashboardEndpoints();
 
 app.Run();

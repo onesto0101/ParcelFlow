@@ -24,7 +24,7 @@ const REASON_MAX_LENGTH = 500 // Shipment.CancellationReasonMaxLength
 export function CancelShipmentDialog({ shipment }: { shipment: Shipment }) {
   const [open, setOpen] = useState(false)
   const [reason, setReason] = useState('')
-  const cancel = useCancelShipment(shipment.trackingNumber)
+  const cancel = useCancelShipment()
 
   const trimmed = reason.trim()
 

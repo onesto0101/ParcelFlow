@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Contrato PÚBLICO del módulo Shipments: los eventos que otros módulos pueden escuchar.
+    Es el único proyecto de Shipments que otro módulo puede referenciar.
+    Regla: solo records con tipos primitivos. Nada del dominio (ni Shipment, ni TrackingNumber).
+  -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\ParcelFlow.BuildingBlocks.Application\ParcelFlow.BuildingBlocks.Application.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

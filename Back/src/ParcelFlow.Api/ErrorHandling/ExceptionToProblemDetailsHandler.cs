@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using ParcelFlow.BuildingBlocks.Application.Exceptions;
 using ParcelFlow.BuildingBlocks.Domain;
 
@@ -11,6 +12,7 @@ namespace ParcelFlow.Api.ErrorHandling;
 ///   ArgumentException   (dato inválido)              → 400 Bad Request
 ///   NotFoundException   (no existe)                  → 404 Not Found
 ///   DomainException     (regla de negocio, estado)   → 409 Conflict
+///   DbUpdateConcurrency (otro lo cambió antes)       → 409 Conflict
 ///   cualquier otra      (bug, BD caída...)           → 500 genérico, sin detalles internos
 ///
 /// El cuerpo es un ProblemDetails con un campo extra "code" (ej. "shipment.already_cancelled")
@@ -27,6 +29,8 @@ internal sealed class ExceptionToProblemDetailsHandler(IProblemDetailsService pr
             ArgumentException => (StatusCodes.Status400BadRequest, "Datos inválidos", "validation.invalid"),
             NotFoundException notFound => (StatusCodes.Status404NotFound, "No encontrado", notFound.Code),
             DomainException domain => (StatusCodes.Status409Conflict, "Operación no permitida", domain.Code),
+            // Otro usuario modificó lo mismo justo antes (concurrencia optimista con xmin).
+            DbUpdateConcurrencyException => (StatusCodes.Status409Conflict, "Conflicto de edición", "concurrency.conflict"),
             _ => (0, "", ""),
         };
 

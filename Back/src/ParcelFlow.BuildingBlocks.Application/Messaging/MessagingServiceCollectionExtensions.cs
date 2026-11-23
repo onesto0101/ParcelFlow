@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using ParcelFlow.BuildingBlocks.Application.IntegrationEvents;
 
 namespace ParcelFlow.BuildingBlocks.Application.Messaging;
 
@@ -21,15 +22,18 @@ public static class MessagingServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Busca en el ensamblado todas las clases que implementan ICommandHandler o IQueryHandler
-    /// y las registra. Así no hay que añadir una línea por cada handler nuevo.
+    /// Busca en el ensamblado todas las clases que implementan ICommandHandler, IQueryHandler o
+    /// IIntegrationEventHandler y las registra. Así no hay que añadir una línea por cada handler nuevo.
     ///
     /// Ejemplo: CreateShipmentHandler implementa ICommandHandler&lt;CreateShipmentCommand, CreateShipmentResult&gt;
     ///   → services.AddScoped(typeof(ICommandHandler&lt;CreateShipmentCommand, CreateShipmentResult&gt;), typeof(CreateShipmentHandler))
+    ///
+    /// Una clase puede implementar varias interfaces (ej. un handler para cinco eventos distintos):
+    /// se registra una vez por cada interfaz.
     /// </summary>
     public static IServiceCollection AddHandlersFromAssembly(this IServiceCollection services, Assembly assembly)
     {
-        Type[] handlerInterfaces = [typeof(ICommandHandler<,>), typeof(IQueryHandler<,>)];
+        Type[] handlerInterfaces = [typeof(ICommandHandler<,>), typeof(IQueryHandler<,>), typeof(IIntegrationEventHandler<>)];
 
         var registrations =
             from type in assembly.GetTypes()

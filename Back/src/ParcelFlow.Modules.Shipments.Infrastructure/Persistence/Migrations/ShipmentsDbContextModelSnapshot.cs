@@ -17,7 +17,7 @@ partial class ShipmentsDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261120163651_InitialShipments";
+    public override string LastMigrationId => "20261123165544_AddOutboxAndConcurrency";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -28,6 +28,41 @@ partial class ShipmentsDbContextModelSnapshot : ModelSnapshot
             .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
         NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+        modelBuilder.Entity("ParcelFlow.BuildingBlocks.Infrastructure.Outbox.OutboxMessage", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uuid");
+
+                b.Property<int>("Attempts")
+                    .HasColumnType("integer");
+
+                b.Property<string>("Content")
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                b.Property<string>("LastError")
+                    .HasMaxLength(2000)
+                    .HasColumnType("character varying(2000)");
+
+                b.Property<DateTime>("OccurredOnUtc")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTime?>("ProcessedOnUtc")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Type")
+                    .IsRequired()
+                    .HasMaxLength(300)
+                    .HasColumnType("character varying(300)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("OccurredOnUtc")
+                    .HasFilter("\"ProcessedOnUtc\" IS NULL");
+
+                b.ToTable("OutboxMessages", "shipments");
+            });
 
         modelBuilder.Entity("ParcelFlow.Modules.Shipments.Domain.Shipment", b =>
             {
@@ -56,6 +91,12 @@ partial class ShipmentsDbContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasMaxLength(12)
                     .HasColumnType("character varying(12)");
+
+                b.Property<uint>("xmin")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
 
                 b.ComplexProperty(typeof(Dictionary<string, object>), "Cost", "ParcelFlow.Modules.Shipments.Domain.Shipment.Cost#Money", b1 =>
                     {

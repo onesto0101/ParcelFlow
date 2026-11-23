@@ -59,7 +59,14 @@ internal sealed class ShipmentConfiguration : IEntityTypeConfiguration<Shipment>
         builder.Property(s => s.CancellationReason).HasMaxLength(Shipment.CancellationReasonMaxLength);
 
         // Los eventos de dominio son "mensajes en memoria", no datos: no se guardan.
+        // (Los que deben salir del módulo se guardan aparte, en el outbox.)
         builder.Ignore(s => s.DomainEvents);
+
+        // Concurrencia optimista con "xmin", una columna de sistema que Postgres cambia en cada UPDATE.
+        // Si dos peticiones cargan el mismo envío y las dos lo modifican, la segunda falla con
+        // DbUpdateConcurrencyException (→ 409) en vez de pisar en silencio el cambio de la primera.
+        // Es una propiedad "shadow": existe para EF pero no en la clase Shipment (el dominio no la ve).
+        builder.Property<uint>("xmin").IsRowVersion();
     }
 
     private static void ConfigureContact(ComplexPropertyBuilder<Contact> contact)

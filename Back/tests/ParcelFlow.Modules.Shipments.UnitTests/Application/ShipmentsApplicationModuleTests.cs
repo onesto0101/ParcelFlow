@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Time.Testing;
 using ParcelFlow.BuildingBlocks.Application.Messaging;
 using ParcelFlow.Modules.Shipments.Application;
@@ -18,6 +20,9 @@ public class ShipmentsApplicationModuleTests
             .AddShipmentsApplication()
             .AddSingleton<IShipmentRepository>(repository)
             .AddSingleton<IShipmentsUnitOfWork, FakeShipmentsUnitOfWork>()
+            .AddSingleton<IShipmentQueries, FakeShipmentQueries>()
+            // Los handlers de integration events piden ILogger<T>; en la API lo registra ASP.NET.
+            .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>))
             .AddSingleton<TimeProvider>(new FakeTimeProvider(new DateTimeOffset(TestData.Now)))
             .BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
 
