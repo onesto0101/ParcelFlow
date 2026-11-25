@@ -25,28 +25,7 @@ internal sealed class GetShipmentByTrackingNumberHandler(IShipmentRepository rep
                 "shipment.not_found",
                 $"No existe un envío con número de guía '{trackingNumber}'.");
 
-        return ToDto(shipment);
+        return shipment.ToDto();
     }
 
-    private static ShipmentDto ToDto(Shipment s) => new(
-        s.Id,
-        s.TrackingNumber.Value,
-        s.Status.ToString(),
-        ToDto(s.Sender),
-        ToDto(s.Recipient),
-        s.Weight.Kilograms,
-        s.Dimensions.Length,
-        s.Dimensions.Width,
-        s.Dimensions.Height,
-        s.Cost.Amount,
-        s.Cost.Currency,
-        s.CreatedAt,
-        s.CancelledAt,
-        s.CancellationReason,
-        s.DeliveredAt);
-
-    private static ContactDto ToDto(Contact c) => new(
-        c.Name,
-        c.Phone,
-        new AddressDto(c.Address.Street, c.Address.City, c.Address.State, c.Address.PostalCode, c.Address.Country));
 }

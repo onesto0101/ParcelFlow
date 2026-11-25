@@ -3,6 +3,7 @@ using ParcelFlow.BuildingBlocks.Application.Messaging;
 using ParcelFlow.BuildingBlocks.Application.Paging;
 using ParcelFlow.Modules.Shipments.Application.CancelShipment;
 using ParcelFlow.Modules.Shipments.Application.CreateShipment;
+using ParcelFlow.Modules.Shipments.Application.GetShipmentById;
 using ParcelFlow.Modules.Shipments.Application.GetShipmentByTrackingNumber;
 using ParcelFlow.Modules.Shipments.Application.GetShipments;
 
@@ -33,6 +34,10 @@ public static class ShipmentEndpoints
         group.MapGet("/tracking/{trackingNumber}", GetShipmentByTrackingNumber)
             .WithName("GetShipmentByTrackingNumber")
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound);
+
+        group.MapGet("/{id:guid}", GetShipmentById)
+            .WithName("GetShipmentById")
             .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPost("/{id:guid}/cancel", CancelShipment)
@@ -71,6 +76,17 @@ public static class ShipmentEndpoints
         CancellationToken cancellationToken)
     {
         var shipment = await mediator.Query(new GetShipmentByTrackingNumberQuery(trackingNumber), cancellationToken);
+
+        return TypedResults.Ok(shipment);
+    }
+
+    // GET /api/shipments/{id:guid}  → 200 OK + ShipmentDto.
+    private static async Task<Ok<ShipmentDto>> GetShipmentById(
+        Guid id,
+        IMediator mediator,
+        CancellationToken cancellationToken)
+    {
+        var shipment = await mediator.Query(new GetShipmentByIdQuery(id), cancellationToken);
 
         return TypedResults.Ok(shipment);
     }
